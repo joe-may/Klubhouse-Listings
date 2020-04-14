@@ -1,6 +1,6 @@
 var passport = require("passport");
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
-var Student = require("../models/student");
+var Member = require("../models/member");
 passport.use(
   new GoogleStrategy(
     {
@@ -10,32 +10,32 @@ passport.use(
     },
     function (accessToken, refreshToken, profile, cb) {
       // a user has logged in with OAuth...
-      Student.findOne({ googleId: profile.id }, function (err, student) {
+      Member.findOne({ googleId: profile.id }, function (err, member) {
         if (err) return cb(err);
-        if (student) {
-          return cb(null, student);
+        if (member) {
+          return cb(null, member);
         } else {
           console.log(profile);
-          // we have a new student via OAuth!
-          var newStudent = new Student({
+          // we have a new member via OAuth!
+          var newMember = new Member({
             name: profile.displayName,
             email: profile.emails[0].value,
             googleId: profile.id,
           });
-          newStudent.save(function (err) {
+          newMember.save(function (err) {
             if (err) return cb(err);
-            return cb(null, newStudent);
+            return cb(null, newMember);
           });
         }
       });
     }
   )
 );
-passport.serializeUser(function (student, done) {
-  done(null, student.id);
+passport.serializeUser(function (member, done) {
+  done(null, member.id);
 });
 passport.deserializeUser(function (id, done) {
-  Student.findById(id, function (err, student) {
-    done(err, student);
+  Member.findById(id, function (err, member) {
+    done(err, member);
   });
 });

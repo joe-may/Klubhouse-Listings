@@ -1,4 +1,4 @@
-const Student = require("../models/student");
+const Member = require("../models/member");
 const Listing = require('../models/new');
 
 module.exports = {
@@ -11,20 +11,20 @@ module.exports = {
 };
 function index(req, res, next) {
   console.log(req.query);
-  // Make the query object to use with Student.find based up
+  // Make the query object to use with member.find based up
   // the user has submitted the search form or now
   let modelQuery = req.query.name
     ? { name: new RegExp(req.query.name, "i") }
     : {};
   // Default to sorting by name
   let sortKey = req.query.sort || "name";
-  Student.find(modelQuery)
+  Member.find(modelQuery)
     .sort(sortKey)
-    .exec(function (err, students) {
+    .exec(function (err, members) {
       if (err) return next(err);
       // Passing search values, name & sortKey, for use in the EJS
-      res.render("students/index", {
-        students,
+      res.render("members/index", {
+        members,
         user: req.user,
         name: req.query.name,
         sortKey,
@@ -35,7 +35,7 @@ function index(req, res, next) {
 function newListing(req, res) {
   // newListing = new Listing();
   console.log('helo');
-  res.render('students/new', { title: 'ADD listing' })
+  res.render('members/new', { title: 'ADD listing' })
 }
 function create(req, res) {
   // for (let key in req.body) {
@@ -43,23 +43,23 @@ function create(req, res) {
   // }
   // const listing = new Listing(req.body)
   // listing.save(function(err) {
-  //   if (err) return res.redirect('/students/new')
-  //   res.redirect(`/students`)
+  //   if (err) return res.redirect('/members/new')
+  //   res.redirect(`/members`)
   // })
 }
 
 function addFact(req, res, next) {
     req.user.facts.push(req.body);
     req.user.save(function(err) {
-      res.redirect('/students');
+      res.redirect('/members');
     });
   }
 
   function delFact(req, res, next) {
-    Student.findOne({'facts._id': req.params.id}, function(err, student) {
+    Member.findOne({'facts._id': req.params.id}, function(err, member) {
       student.facts.id(req.params.id).remove();
-      student.save(function(err) {
-        res.redirect('/students');
+      member.save(function(err) {
+        res.redirect('/members');
       });
     });
   }

@@ -21,7 +21,7 @@ require('./config/passport');
 
 // require our routes
 var indexRoutes = require('./routes/index');
-var studentsRoutes = require('./routes/students');
+var membersRoutes = require('./routes/members');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -44,7 +44,7 @@ app.use(methodOverride('_method'));
 app.use(passport.initialize());
  app.use(passport.session());
 app.use('/', indexRoutes);
-app.use('/', studentsRoutes);
+app.use('/', membersRoutes);
 
 // invalid request, send 404 page
 app.use(function(req, res) {

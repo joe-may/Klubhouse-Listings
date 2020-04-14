@@ -3,11 +3,9 @@ var passport = require('passport');
 
 // The root route renders our only view
 router.get('/', function(req, res) {
-  res.redirect('/students');
+  res.redirect('/members');
 });
-router.get('/students/new', function(req, res) {
-  res.redirect('/students/new');
-});
+
 ///// Google OAuth login route
 router.get('/auth/google', passport.authenticate(
   'google',
@@ -18,8 +16,8 @@ router.get('/auth/google', passport.authenticate(
  router.get('/Kluboauth', passport.authenticate(
   'google',
   {
-    successRedirect : '/students',
-    failureRedirect : '/students'
+    successRedirect : '/members',
+    failureRedirect : '/members'
   }
 ));
 
